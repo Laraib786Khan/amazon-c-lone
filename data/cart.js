@@ -1,5 +1,3 @@
-import {validDeliveryOption} from './deliveryOptions.js'
-
 export let cart;
 
 loadFromStorage();
@@ -69,29 +67,19 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
     }
   });
 
-  if(!matchingItem) {
-    return;
-  }
-
-  if(!validDeliveryOption(deliveryOptionId)) {
-    return;
-  }
-
   matchingItem.deliveryOptionId = deliveryOptionId;
 
   saveToStorage();
 }
 
-export function updateQuantity(productId, newQuantity) {
-  let matchingItem;
+export function loadCart(fun) {
+  const xhr = new XMLHttpRequest();
 
-  cart.forEach((cartItem) => {
-    if (productId === cartItem.productId) {
-      matchingItem = cartItem;
-    }
+  xhr.addEventListener('load', () => {
+    console.log(xhr.response);
+    fun();
   });
 
-  matchingItem.quantity = newQuantity;
-
-  saveToStorage();
+  xhr.open('GET', 'https://supersimplebackend.dev/cart');
+  xhr.send();
 }
